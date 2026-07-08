@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Web App Project</title>
+  <style>
+    :root {
+      --bg: #06101f;
+      --surface: rgba(255, 255, 255, 0.08);
+      --surface-strong: rgba(255, 255, 255, 0.14);
+      --accent: #38bdf8;
+      --accent-strong: #22c55e;
+      --text: #e5e7eb;
+      --muted: rgba(229, 231, 235, 0.72);
+      --danger: #fb7185;
+      --radius: 24px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+      font-family: Inter, system-ui, system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 22%),
+                  radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.12), transparent 20%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 20px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand h1 {
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      letter-spacing: -0.03em;
+    }
+
+    .brand p {
+      color: var(--muted);
+      max-width: 54rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav button,
+    .nav a {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .nav button:hover,
+    .nav a:hover {
+      transform: translateY(-1px);
+      background: rgba(56,189,248,0.18);
+    }
+
+    .nav-toggle {
+      display: none;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.3fr 0.9fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .hero-card,
+    .section,
+    .project-card,
+    .panel,
+    .faq-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card h2 {
+      font-size: clamp(2rem, 3vw, 2.7rem);
+      margin-bottom: 16px;
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-actions a,
+    .hero-actions button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .hero-actions button:hover,
+    .hero-actions a:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .overview {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .overview-item {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .overview-item h3 {
+      margin-bottom: 10px;
+    }
+
+    .overview-item p {
+      color: var(--muted);
+    }
+
+    .section {
+      display: grid;
+      gap: 18px;
+    }
+
+    .section header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section header h2 {
+      margin: 0;
+    }
+
+    .grid-3,
+    .grid-2 {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .project-card {
+      display: grid;
+      gap: 14px;
+    }
+
+    .project-card h3 {
+      margin-bottom: 4px;
+    }
+
+    .project-card p,
+    .panel p,
+    .faq-card p {
+      color: var(--muted);
+    }
+
+    .project-card .tag-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .tag {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.14);
+      font-size: 0.85rem;
+    }
+
+    .panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .input-row,
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+    }
+
+    .input-row input,
+    .filter-row select,
+    .panel input,
+    .panel select,
+    .panel textarea {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 14px 16px;
+      outline: none;
+    }
+
+    .panel textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .button-primary,
+    .button-secondary {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .button-primary {
+      background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+      color: white;
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .button-primary:hover,
+    .button-secondary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .product-list,
+    .todo-list,
+    .faq-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .product-card,
+    .todo-item,
+    .faq-card {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .product-card .row,
+    .todo-item .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .product-card .row strong,
+    .todo-item strong {
+      font-size: 1rem;
+    }
+
+    .product-card .meta,
+    .todo-item small,
+    .faq-card small {
+      color: var(--muted);
+    }
+
+    .todo-item button,
+    .product-card button {
+      border: none;
+      border-radius: 14px;
+      background: rgba(251, 113, 133, 0.18);
+      padding: 10px 14px;
+      color: #fecaca;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .todo-item button:hover,
+    .product-card button:hover {
+      background: rgba(251, 113, 133, 0.25);
+    }
+
+    .faq-card button {
+      margin-top: 16px;
+      width: fit-content;
+    }
+
+    .status {
+      color: var(--accent-strong);
+      font-weight: 700;
+    }
+
+    .hero-image {
+      min-height: 320px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.38), rgba(34,197,94,0.22));
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .hero-image h3 {
+      font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+      margin-bottom: 16px;
+    }
+
+    .hero-image p {
+      color: var(--text);
+      max-width: 30rem;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .grid-3,
+      .grid-2,
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        justify-content: center;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 14px;
+      }
+
+      .topbar,
+      .hero-card,
+      .section,
+      .project-card,
+      .panel,
+      .faq-card {
+        padding: 20px;
+      }
+
+      .nav button,
+      .nav a {
+        padding: 10px 12px;
+      }
+
+      .input-row,
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Final Web App Project</h1>
+        <p>Complete responsive web app with portfolio, interactive shop, todo persistence, and browser compatibility.</p>
+      </div>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#projects">Projects</a>
+        <a href="#shop">Shop</a>
+        <a href="#todo">Todo</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero-card" id="overview">
+      <div class="hero">
+        <div>
+          <h2>Build a final web app that looks great on every device.</h2>
+          <p>Developed entirely in HTML, CSS, and JavaScript, this project demonstrates responsive design, dynamic interaction, data persistence, and compatibility across major browsers.</p>
+          <div class="hero-actions">
+            <a href="#projects">View Projects</a>
+            <button type="button" id="scrollShop">Explore Shop</button>
+          </div>
+        </div>
+        <div class="hero-image">
+          <h3>Compatible. Responsive. Optimized.</h3>
+          <p>Works in Chrome, Firefox, Safari, and mobile browsers without external libraries.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <header>
+        <div>
+          <h2>Project Highlights</h2>
+          <p>Modern UI, dynamic interactions, and clean performance-focused structure.</p>
+        </div>
+        <div><span class="status">Optimized for phones, tablets, and desktops</span></div>
+      </header>
+      <div class="overview">
+        <div class="overview-item">
+          <h3>Responsive Layout</h3>
+          <p>Grid and flex layouts reshape the page for every screen size while keeping the experience fast and accessible.</p>
+        </div>
+        <div class="overview-item">
+          <h3>Dynamic Data</h3>
+          <p>Shop filtering, todo persistence, and contact feedback are handled with clean JavaScript and minimal DOM updates.</p>
+        </div>
+        <div class="overview-item">
+          <h3>Browser Friendly</h3>
+          <p>The code uses standard APIs supported by Chrome, Firefox, Safari, and mobile browsers for compatibility and reliability.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <header>
+        <h2>Featured Projects</h2>
+      </header>
+      <div class="grid-3">
+        <article class="project-card">
+          <h3>Portfolio Experience</h3>
+          <p>Multi-section page with smooth navigation, clear visual hierarchy, and modern styling for professional presentation.</p>
+          <div class="tag-bar">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">Responsive</span>
+          </div>
+          <button type="button" class="button-secondary">Explore</button>
+        </article>
+        <article class="project-card">
+          <h3>Todo List</h3>
+          <p>Create and remove tasks, with persistence saved in localStorage so items remain after refreshing the browser.</p>
+          <div class="tag-bar">
+            <span class="tag">JavaScript</span>
+            <span class="tag">localStorage</span>
+            <span class="tag">UX</span>
+          </div>
+          <button type="button" class="button-secondary">Run</button>
+        </article>
+        <article class="project-card">
+          <h3>Shop Interface</h3>
+          <p>Filter products by category, sort by price or rating, and display results dynamically using client-side logic.</p>
+          <div class="tag-bar">
+            <span class="tag">Filtering</span>
+            <span class="tag">Sorting</span>
+            <span class="tag">Interactive</span>
+          </div>
+          <button type="button" class="button-secondary">Shop</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="shop">
+      <header>
+        <h2>Product Catalog</h2>
+        <p>Browse products, filter categories, and sort results with instant client-side updates.</p>
+      </header>
+      <div class="panel">
+        <div class="filter-row">
+          <select id="categoryFilter" aria-label="Filter category">
+            <option value="all">All Categories</option>
+            <option value="electronics">Electronics</option>
+            <option value="services">Services</option>
+            <option value="tools">Tools</option>
+          </select>
+          <select id="sortSelect" aria-label="Sort by">
+            <option value="default">Sort by</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
+            <option value="ratingDesc">Rating</option>
+          </select>
+        </div>
+        <div class="product-list" id="productList"></div>
+      </div>
+    </section>
+
+    <section class="section" id="todo">
+      <header>
+        <h2>Todo App</h2>
+        <p>Add tasks, delete them, and keep them saved in localStorage across browser sessions.</p>
+      </header>
+      <div class="panel">
+        <div class="input-row">
+          <input id="todoInput" type="text" placeholder="Add a task" aria-label="Todo input" />
+          <button type="button" id="addTodoBtn" class="button-primary">Add</button>
+        </div>
+        <div class="todo-list" id="todoList"></div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <header>
+        <h2>Frequently Asked Questions</h2>
+      </header>
+      <div class="grid-2 faq-list">
+        <article class="faq-card">
+          <h3>Does it work on mobile?</h3>
+          <p>Yes. The layout shifts gracefully to narrow screens with responsive grid and flex styling.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Is the product catalog dynamic?</h3>
+          <p>Yes. Products update instantly when the user changes category or sort options.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Can I keep my todo list?</h3>
+          <p>Yes. The app stores tasks in localStorage so they remain even after closing or refreshing the browser.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Which browsers are supported?</h3>
+          <p>Chrome, Firefox, Safari, Edge, and mobile browsers that support ES6 and standard DOM APIs.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <header>
+        <h2>Contact</h2>
+        <p>Send a message and get a response quickly. The contact form validates basic input and provides instant feedback.</p>
+      </header>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel">
+            <input id="contactName" type="text" placeholder="Your name" aria-label="Your name" />
+            <input id="contactEmail" type="email" placeholder="Your email" aria-label="Your email" />
+            <textarea id="contactMessage" placeholder="Your message" aria-label="Your message"></textarea>
+            <button type="button" id="submitContact" class="button-primary">Send Message</button>
+            <p class="status" id="contactStatus"></p>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Project Details</h3>
+          <p>Use this template to demonstrate a final project with multiple integrated web skills including responsive design, dynamic UI, data persistence, and browser compatibility.</p>
+          <div class="overview-item">
+            <h3>Compatible Browsers</h3>
+            <p>Built using standard styles and JavaScript APIs for broad compatibility.</p>
+          </div>
+          <div class="overview-item">
+            <h3>Optimized Experience</h3>
+            <p>Minimal DOM writes, lightweight assets, and responsive layouts ensure fast performance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    var products = [
+      { id: 1, title: 'Smart Pollution Sensor', category: 'electronics', price: 129, rating: 4.8, description: 'Real-time air quality data with sleek sensor design.' },
+      { id: 2, title: 'Industrial Analytics Service', category: 'services', price: 299, rating: 4.9, description: 'Detailed environmental reports and alert management.' },
+      { id: 3, title: 'Monitoring Control Panel', category: 'tools', price: 199, rating: 4.6, description: 'Dashboard for managing pollution and emissions in real time.' },
+      { id: 4, title: 'DIY Sensor Kit', category: 'electronics', price: 89, rating: 4.4, description: 'Easy setup kit for home or small workspace monitoring.' },
+      { id: 5, title: 'Compliance Support Service', category: 'services', price: 179, rating: 4.7, description: 'Guidance and reporting to meet environmental regulations.' },
+      { id: 6, title: 'Field Data Logger', category: 'tools', price: 239, rating: 4.5, description: 'Portable logger for field inspections and data capture.' }
+    ];
+
+    var STORAGE_KEY = 'finalProjectTodos';
+    var todoItems = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
+
+    var categoryFilter = document.getElementById('categoryFilter');
+    var sortSelect = document.getElementById('sortSelect');
+    var productList = document.getElementById('productList');
+    var todoInput = document.getElementById('todoInput');
+    var addTodoBtn = document.getElementById('addTodoBtn');
+    var todoList = document.getElementById('todoList');
+    var contactName = document.getElementById('contactName');
+    var contactEmail = document.getElementById('contactEmail');
+    var contactMessage = document.getElementById('contactMessage');
+    var submitContact = document.getElementById('submitContact');
+    var contactStatus = document.getElementById('contactStatus');
+    var scrollShop = document.getElementById('scrollShop');
+
+    function renderProducts() {
+      var category = categoryFilter.value;
+      var sortKey = sortSelect.value;
+      var filtered = products.slice();
+
+      if (category !== 'all') {
+        filtered = filtered.filter(function(product) {
+          return product.category === category;
+        });
+      }
+
+      if (sortKey === 'priceAsc') {
+        filtered.sort(function(a, b) { return a.price - b.price; });
+      } else if (sortKey === 'priceDesc') {
+        filtered.sort(function(a, b) { return b.price - a.price; });
+      } else if (sortKey === 'ratingDesc') {
+        filtered.sort(function(a, b) { return b.rating - a.rating; });
+      }
+
+      if (!filtered.length) {
+        productList.innerHTML = '<p class="status">No products match the selected filters.</p>';
+        return;
+      }
+
+      productList.innerHTML = filtered.map(function(product) {
+        return (
+          '<article class="product-card">' +
+            '<div class="row"><strong>' + product.title + '</strong><span>$' + product.price + '</span></div>' +
+            '<p>' + product.description + '</p>' +
+            '<div class="row">' +
+              '<span class="meta">' + product.category + '</span>' +
+              '<span class="meta">Rating ' + product.rating.toFixed(1) + ' ⭐</span>' +
+            '</div>' +
+            '<button type="button">View Product</button>' +
+          '</article>'
+        );
+      }).join('');
+    }
+
+    function saveTodos() {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(todoItems));
+      } catch (error) {
+        console.error('Failed to save todos', error);
+      }
+    }
+
+    function renderTodos() {
+      if (!todoItems.length) {
+        todoList.innerHTML = '<p class="status">No tasks yet. Add a todo item to get started.</p>';
+        return;
+      }
+
+      todoList.innerHTML = todoItems.map(function(item) {
+        return (
+          '<div class="todo-item">' +
+            '<div>' +
+              '<strong>' + item.text + '</strong>' +
+              '<small>' + item.date + '</small>' +
+            '</div>' +
+            '<button type="button" data-id="' + item.id + '">Remove</button>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function addTodo() {
+      var text = todoInput.value.trim();
+      if (!text) {
+        return;
+      }
+
+      todoItems.push({ id: Date.now(), text: text, date: new Date().toLocaleDateString() });
+      todoInput.value = '';
+      saveTodos();
+      renderTodos();
+    }
+
+    function removeTodo(id) {
+      todoItems = todoItems.filter(function(item) { return item.id !== id; });
+      saveTodos();
+      renderTodos();
+    }
+
+    addTodoBtn.addEventListener('click', addTodo);
+    todoInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        addTodo();
+      }
+    });
+
+    todoList.addEventListener('click', function(event) {
+      var button = event.target.closest('button');
+      if (!button) {
+        return;
+      }
+      var id = parseInt(button.getAttribute('data-id'), 10);
+      if (!isNaN(id)) {
+        removeTodo(id);
+      }
+    });
+
+    categoryFilter.addEventListener('change', renderProducts);
+    sortSelect.addEventListener('change', renderProducts);
+
+    submitContact.addEventListener('click', function() {
+      var name = contactName.value.trim();
+      var email = contactEmail.value.trim();
+      var message = contactMessage.value.trim();
+
+      if (!name || !email || !message) {
+        contactStatus.textContent = 'Please complete every field before sending.';
+        return;
+      }
+
+      contactStatus.textContent = 'Thanks, ' + name + '! Your message is ready to be sent.';
+      contactName.value = '';
+      contactEmail.value = '';
+      contactMessage.value = '';
+    });
+
+    scrollShop.addEventListener('click', function() {
+      var shopSection = document.getElementById('shop');
+      if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    renderProducts();
+    renderTodos();
+  </script>
+</body>
+</html>
